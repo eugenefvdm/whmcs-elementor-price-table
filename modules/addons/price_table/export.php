@@ -33,7 +33,7 @@ foreach ($groups as $group) {
         }
     }
 
-    if (!$data) dd('issue');
+//    if (!$data) dd('issue');
 
     echo "<pre>";
     echo(json_encode($data, JSON_PRETTY_PRINT));
