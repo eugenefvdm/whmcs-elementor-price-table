@@ -23,12 +23,17 @@ foreach ($groups as $group) {
     foreach ($products as $product) {
         $data[$product->id]['group'] = $group->name;
         $data[$product->id]['name']  = $product->name;
-        $pricing                     = Pricing::whereRelid($product->id)->get();
+        $pricing                     = Pricing::whereRelid($product->id)
+            ->whereType('product')
+            ->get();
         foreach ($pricing as $price) {
             $data[$product->id][$currencyCode[$price->currency]]['setup']   = $price->msetupfee;
             $data[$product->id][$currencyCode[$price->currency]]['monthly'] = $price->monthly;
+            $data[$product->id][$currencyCode[$price->currency]]['annually'] = $price->annually;
         }
     }
+
+    if (!$data) dd('issue');
 
     echo "<pre>";
     echo(json_encode($data, JSON_PRETTY_PRINT));
