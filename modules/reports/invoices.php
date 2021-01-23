@@ -203,7 +203,9 @@ if (count($incfields)) {
             }
             if ($val == 'clientname') {
                 $query->whereRaw(
-                    "concat(tblclients.firstname, ' ', tblclients.lastname, ' ', tblclients.companyname) "
+                    // "concat(tblclients.firstname, ' ', tblclients.lastname) "
+                    
+                    "if (tblclients.companyname != '', concat(companyname, ' (' , firstname, ' ', lastname, ')'), concat(firstname, ' ', lastname)) "
                     . "{$filtertype[$i]} '{$filterq[$i]}'"
                 );
             } else {
@@ -220,7 +222,8 @@ if (count($incfields)) {
         if (array_key_exists($fieldname, $filterfields)) {
             $reportdata["tableheadings"][] = $filterfields[$fieldname];
             if ($fieldname == "clientname") {
-                $query->addSelect(Capsule::raw("concat(tblclients.firstname, ' ', tblclients.lastname, ' ', tblclients.companyname)"));
+                // $query->addSelect(Capsule::raw("concat(tblclients.firstname, ' ', tblclients.lastname)"));
+                $query->addSelect(Capsule::raw("if (tblclients.companyname != '', concat(companyname, ' (' , firstname, ' ', lastname, ')'), concat(firstname, ' ', lastname))"));
             } else {
                 $query->addSelect("tblinvoices.{$fieldname}");
             }
